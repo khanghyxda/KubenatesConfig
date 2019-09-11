@@ -11,13 +11,28 @@ spec:
     name: http
   selector:
     app: swing
+  #type:
+    #LoadBalancer  
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: swing-ingress
+spec:
+  rules:
+  - host: foo.shotel.com
+    http:
+      paths:
+      - backend:
+          serviceName: swing-service
+          servicePort: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: swing
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -37,13 +52,3 @@ spec:
           secret:
             secretName: test-secret
 
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-    name: hr--gateway-service-disable-mtls
-spec:
-    host: hr--gateway-service.default.svc.cluster.local
-    trafficPolicy:
-    tls:
-        mode: DISABLE

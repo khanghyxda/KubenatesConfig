@@ -27,3 +27,14 @@ spec:
   - route:
     - destination:
         host: swing-service
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: hr--gateway-service-disable-mtls
+spec:
+    host: hr--gateway-service.default.svc.cluster.local
+    trafficPolicy:
+    tls:
+        mode: DISABLE
