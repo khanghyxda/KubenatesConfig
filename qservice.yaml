@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qservice
+spec:
+  selector:
+    matchLabels:
+      app: qservice
+      department: sales
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: qservice
+    spec:
+      containers:
+      - name: qservice
+        image: "gcr.io/google-samples/hello-app:2.0"
+      - name: "PORT"
+        value: "7000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qservice
+spec:
+  type: LoadBalancer
+  selector:
+    app: qservice
+  ports:
+  - protocol: TCP
+    port: 7000
+    targetPort: 7000
