@@ -6,7 +6,8 @@ metadata:
     app: swing
 spec:
   ports:
-  - port: 8000
+  - port: 80
+    targetPort: 8000
     name: http
   selector:
     app: swing
@@ -14,7 +15,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: swing-v1
+  name: swing
 spec:
   replicas: 2
   template:
@@ -35,3 +36,14 @@ spec:
         - name: secret
           secret:
             secretName: test-secret
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: hr--gateway-service-disable-mtls
+spec:
+    host: hr--gateway-service.default.svc.cluster.local
+    trafficPolicy:
+    tls:
+        mode: DISABLE
