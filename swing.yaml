@@ -11,21 +11,25 @@ spec:
     name: http
   selector:
     app: swing
-  #type:
+  type:
     #LoadBalancer  
+    NodePort
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: swing-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
 spec:
   rules:
-  - host: foo.shotel.com
+  - host: sw.shotel.vn
     http:
       paths:
       - backend:
           serviceName: swing-service
           servicePort: 80
+
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
