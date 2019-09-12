@@ -20,7 +20,7 @@ kind: Ingress
 metadata:
   name: swing-ingress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
+    kubernetes.io/ingress.global-static-ip-name: "swing-static-ip"
 spec:
   rules:
   - host: sw.shotel.vn
