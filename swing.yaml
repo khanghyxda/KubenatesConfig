@@ -1,51 +1,36 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: swing-service
+  name: sservice
   labels:
-    app: swing
+    app: sservice
 spec:
   ports:
   - port: 80
     targetPort: 8000
     name: http
   selector:
-    app: swing
+    app: sservice
   type:
     #LoadBalancer  
     NodePort
 ---
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: swing-ingress
-  annotations:
-    kubernetes.io/ingress.global-static-ip-name: "swing-static-ip"
-spec:
-  rules:
-  - host: sw.shotel.vn
-    http:
-      paths:
-      - backend:
-          serviceName: swing-service
-          servicePort: 80
-
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: swing
+  name: sservice
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: swing
+        app: sservice
         version: v1
     spec:
       containers:
-      - name: swing
-        image: gcr.io/formal-guru-247103/swing:latest
+      - name: sservice
+        image: gcr.io/formal-guru-247103/sservice:latest
+        imagePullPolicy: "Always"
         volumeMounts:
         - name: secret
           mountPath: /etc/secret
@@ -55,4 +40,48 @@ spec:
         - name: secret
           secret:
             secretName: test-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smanager
+  labels:
+    app: smanager
+spec:
+  ports:
+  - port: 80
+    targetPort: 8100
+    name: http
+  selector:
+    app: smanager
+  type:
+    #LoadBalancer  
+    NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: smanager
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: smanager
+        version: v1
+    spec:
+      containers:
+      - name: smanager
+        image: gcr.io/formal-guru-247103/smanager:latest
+        imagePullPolicy: "Always"
+        volumeMounts:
+        - name: secret
+          mountPath: /etc/secret
+        ports:
+        - containerPort: 8100
+      volumes:
+        - name: secret
+          secret:
+            secretName: test-secret
+
 
