@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: sservice
-        image: gcr.io/formal-guru-247103/sservice:latest
+        image: gcr.io/formal-guru-247103/sservice
         imagePullPolicy: "Always"
         volumeMounts:
         - name: secret
@@ -72,7 +72,7 @@ spec:
     spec:
       containers:
       - name: smanager
-        image: gcr.io/formal-guru-247103/smanager:latest
+        image: gcr.io/formal-guru-247103/smanager
         imagePullPolicy: "Always"
         volumeMounts:
         - name: secret
